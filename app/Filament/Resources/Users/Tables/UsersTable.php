@@ -17,10 +17,12 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                ->sortable(),
-                TextColumn::make('user_name')
+                TextColumn::make('user_id')
                 ->sortable()
+                ->label('ID'),
+                TextColumn::make('username')
+                ->searchable(),
+                TextColumn::make('user_name')
                 ->searchable(),
                 TextColumn::make('email')
                 ->searchable(),

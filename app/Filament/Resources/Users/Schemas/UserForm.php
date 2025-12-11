@@ -24,6 +24,7 @@ class UserForm
                     ->unique(),
                 TextInput::make('password')
                     ->type('password')
+                    ->password()
                     ->required()
                     ->minLength(8),
             ]);

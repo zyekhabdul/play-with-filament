@@ -36,6 +36,7 @@ class ForgotPasswordController extends Controller
             return back()->with('status', __($status));
         }
 
-        return back()->withErrors(['email' => __($status)]);
+        // return error keyed to the login field (matches your form)
+        return back()->withErrors(['login' => __($status)]);
     }
 }

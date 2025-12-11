@@ -14,6 +14,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Infolists;
+use Filament\Forms\Components\TextInput;
+
 
 class UserResource extends Resource
 {
@@ -25,7 +27,23 @@ class UserResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return UserForm::configure($schema);
+        return $schema
+        ->components([
+            TextInput::make('user_name')->required()->label('Full Name'),
+            TextInput::make('username')
+            ->required()
+            ->unique(),
+            TextInput::make('email')->email()
+            ->required()
+            ->unique(),
+            TextInput::make('password')
+                ->type('password')
+                ->password()
+                ->required()
+                ->minLength(4)
+                ->revealable(),
+            // ...
+        ]);
     }
 
     public static function infolist(Schema $schema): Schema
