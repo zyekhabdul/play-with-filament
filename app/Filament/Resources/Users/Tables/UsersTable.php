@@ -20,18 +20,20 @@ class UsersTable
                 TextColumn::make('user_id')
                 ->sortable()
                 ->label('ID'),
+                TextColumn::make('name')
+                ->searchable(),
                 TextColumn::make('username')
                 ->searchable(),
-                TextColumn::make('user_name')
-                ->searchable(),
+                TextColumn::make('role')
+                ->sortable(),
                 TextColumn::make('email')
                 ->searchable(),
                 TextColumn::make('created_at')
                 ->dateTime()
-                ->toggleable($isToggledHiddenByDefault = true),
+                ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                 ->dateTime()
-                ->toggleable($isToggledHiddenByDefault = true),
+                ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

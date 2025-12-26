@@ -4,31 +4,41 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('fee_bills', function (Blueprint $table) {
             $table->id('fee_bill_id');
 
-            $table->foreignId('student_id')->constrained('students', 'student_id')->cascadeOnDelete();
-            $table->foreignId('fee_package_id')->constrained('fee_packages', 'fee_package_id')->cascadeOnDelete();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('fee_package_id');
 
-            $table->string('month');
+            $table->tinyInteger('month'); // 1 - 12
             $table->year('year');
-            $table->integer('total_amount');
 
-            $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
+            $table->integer('total_amount');
+            // $table->integer('paid_amount')->default(0);
+
+            $table->enum('payment_status', ['unpaid', 'partial', 'paid'])
+                  ->default('unpaid');
+
             $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('student_id')
+                  ->references('student_id')
+                  ->on('students')
+                  ->cascadeOnDelete();
+
+            $table->foreign('fee_package_id')
+                  ->references('fee_package_id')
+                  ->on('fee_packages');
+
+            // Prevent duplicate monthly bills
+            $table->unique(['student_id', 'month', 'year']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('fee_bills');

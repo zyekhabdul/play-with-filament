@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable; // if using auth
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -16,11 +18,11 @@ class User extends Authenticatable
     protected $keyType = 'int';
 
     protected $fillable = [
-        'user_name',
+        'name',
         'username',
+        'role',
         'email',
         'password',
-        'role',
     ];
 
     protected $hidden = [
@@ -34,7 +36,7 @@ class User extends Authenticatable
      */
     public function getNameAttribute(): string
     {
-        return (string) ($this->attributes['user_name'] ?? $this->attributes['username'] ?? $this->attributes['email'] ?? '');
+        return (string) ($this->attributes['name'] ?? $this->attributes['username'] ?? $this->attributes['email'] ?? '');
     }
 
     /**
@@ -43,5 +45,24 @@ class User extends Authenticatable
     public function payments()
     {
         return $this->hasMany(Payment::class, 'user_id', 'user_id');
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Cek panel ID (lihat di config/filament.php)
+        $panelId = $panel->getId();
+
+        // Jika panel admin, hanya role admin
+        if ($panelId === 'admin') {
+            return $this->role === 'admin';
+        }
+
+        // Jika panel user, hanya role user
+        if ($panelId === 'user') {
+            return $this->role === 'user';
+        }
+
+        // Default
+        return true;
     }
 }
