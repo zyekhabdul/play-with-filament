@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->tinyInteger('month'); // 1 - 12
             $table->year('year');
 
-            $table->integer('total_amount');
+            $table->unsignedBiginteger('total_amount');
             // $table->integer('paid_amount')->default(0);
 
             $table->enum('payment_status', ['unpaid', 'partial', 'paid'])

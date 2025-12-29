@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Payment extends Model
 {
@@ -29,7 +30,25 @@ class Payment extends Model
     ];
 
     /**
-     * The fee bill this payment applies to
+     * Logic otomatis untuk memperbarui status pada FeeBill saat payment dibuat
+     */
+    protected static function booted()
+    {
+
+    static::creating(function (Payment $payment) {
+        $payment->user_id = Auth::id();
+    });
+
+    static::created(function (Payment $payment) {
+        $payment->feeBill->recalculatePaymentStatus();
+    });
+
+    static::deleted(function (Payment $payment) {
+        $payment->feeBill->recalculatePaymentStatus();
+    });
+    }
+    /**
+     * Relasi: Pembayaran ini merujuk ke satu tagihan (FeeBill)
      */
     public function feeBill()
     {
@@ -37,7 +56,7 @@ class Payment extends Model
     }
 
     /**
-     * The user (treasurer) who recorded the payment
+     * Relasi: User (bendahara/admin) yang mencatat pembayaran ini
      */
     public function user()
     {

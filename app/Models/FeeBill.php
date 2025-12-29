@@ -28,12 +28,29 @@ class FeeBill extends Model
         'total_amount' => 'integer',
     ];
 
+
+    public function recalculatePaymentStatus(): void
+{
+    $totalPaid = $this->payments()->sum('amount_paid');
+
+    if ($totalPaid >= $this->total_amount) {
+        $this->payment_status = 'paid';
+    } elseif ($totalPaid > 0) {
+        $this->payment_status = 'partial';
+    } else {
+        $this->payment_status = 'unpaid';
+    }
+
+    $this->save();
+}
+
     /**
      * The student who owes this bill
      */
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'student_id');
+        return $this->belongsTo(Student::class, 'student_id', 'student_id')
+        ->withTrashed();
     }
 
     /**

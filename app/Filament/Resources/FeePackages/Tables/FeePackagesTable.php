@@ -18,7 +18,12 @@ class FeePackagesTable
                     ->searchable(),
                 TextColumn::make('amount')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->money('idr', true),
+                TextColumn::make('description')
+                    ->limit(50)
+                    ->wrap()
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

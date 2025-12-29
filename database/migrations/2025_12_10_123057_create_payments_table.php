@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
 
             $table->date('payment_date');
-            $table->integer('amount_paid');
+            $table->unsignedBigInteger('amount_paid');
             $table->text('notes')->nullable();
 
             $table->timestamps();

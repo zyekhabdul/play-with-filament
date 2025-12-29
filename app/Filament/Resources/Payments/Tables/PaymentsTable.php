@@ -17,14 +17,16 @@ class PaymentsTable
     {
         return $table
             ->columns([
+                TextColumn::make('feeBill.payment_status')
+                    ->label('Payment Status'),
+                TextColumn::make('user.name')
+                    ->label('Recorded By'),
                 TextColumn::make('payment_date')
                     ->label('Payment Date')
                     ->date(),
                 TextColumn::make('amount_paid')
                     ->label('Amount Paid')
                     ->money('idr', true),
-                TextColumn::make('payment_method')
-                    ->label('Payment Method'),
                 TextColumn::make('notes')
                     ->label('Notes')
                     ->limit(50),
