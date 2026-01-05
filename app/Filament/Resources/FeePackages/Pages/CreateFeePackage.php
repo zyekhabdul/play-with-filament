@@ -9,3 +9,4 @@ class CreateFeePackage extends CreateRecord
 {
     protected static string $resource = FeePackageResource::class;
 }
+

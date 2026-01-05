@@ -17,3 +17,4 @@ class ListFeePackages extends ListRecords
         ];
     }
 }
+
